@@ -6,35 +6,35 @@ namespace TeacherManagement.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
-    public class CoursesController : ControllerBase
+    public class BranchesController : ControllerBase
     {
-        private readonly ICourseService _service;
-        public CoursesController(ICourseService service) { _service = service; }
+        private readonly IBranchService _service;
+        public BranchesController(IBranchService service) { _service = service; }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CourseDto>>> GetAll()
+        public async Task<ActionResult<IEnumerable<BranchDto>>> GetAll()
         {
             var list = await _service.GetAllAsync();
             return Ok(list);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<CourseDto>> Get(int id)
+        public async Task<ActionResult<BranchDto>> Get(int id)
         {
-            var c = await _service.GetByIdAsync(id);
-            if (c == null) return NotFound();
-            return Ok(c);
+            var b = await _service.GetByIdAsync(id);
+            if (b == null) return NotFound();
+            return Ok(b);
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(CourseCreateDto model)
+        public async Task<ActionResult> Create(BranchDto model)
         {
             var created = await _service.CreateAsync(model);
-            return CreatedAtAction(nameof(Get), new { id = created.CourseId }, created);
+            return CreatedAtAction(nameof(Get), new { id = created.BranchId }, created);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update(int id, CourseUpdateDto model)
+        public async Task<ActionResult> Update(int id, BranchDto model)
         {
             var ok = await _service.UpdateAsync(id, model);
             if (!ok) return NotFound();

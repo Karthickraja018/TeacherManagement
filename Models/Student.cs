@@ -1,15 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 
 namespace TeacherManagement.Models
 {
     public class Student
     {
-        [Required]
         public int StudentId { get; set; }
 
-        [Required]
         public string Name { get; set; }
 
         public int BranchId { get; set; }

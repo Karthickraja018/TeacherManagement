@@ -1,14 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace TeacherManagement.Models
 {
     public class Teacher
     {
-        [Key]
         public int TeacherId { get; set; }
 
-        [Required]
         public string TeacherName { get; set; }
 
         public int BranchId { get; set; }

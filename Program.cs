@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using TeacherManagement.Data;
 using TeacherManagement.Models;
+using TeacherManagement.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,9 @@ builder.Services.AddSwaggerGen(); // Swashbuckle
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<TeacherContext>(options =>
     options.UseSqlServer(connectionString));
+
+// Register app services
+builder.Services.AddTeacherManagementServices();
 
 var app = builder.Build();
 
