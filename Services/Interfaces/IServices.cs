@@ -10,6 +10,14 @@ namespace TeacherManagement.Services
         Task<StudentDto> CreateAsync(StudentCreateDto model);
         Task<bool> UpdateAsync(int id, StudentUpdateDto model);
         Task<bool> DeleteAsync(int id);
+
+        // Student self-service
+        Task<StudentDetailsDto?> GetMyProfileAsync(int studentId);
+        Task<bool> UpdateMyAddressAsync(int studentId, AddressCreateDto model);
+        Task<IEnumerable<CourseDto>> GetMyCoursesAsync(int studentId);
+        Task<IEnumerable<SubjectDto>> GetMySubjectsAsync(int studentId);
+        Task<IEnumerable<TeacherDto>> GetMyTeachersAsync(int studentId);
+        Task<bool> EnrollInCourseAsync(int studentId, int courseId);
     }
 
     public interface ITeacherService
@@ -19,6 +27,12 @@ namespace TeacherManagement.Services
         Task<TeacherDto> CreateAsync(TeacherCreateDto model);
         Task<bool> UpdateAsync(int id, TeacherUpdateDto model);
         Task<bool> DeleteAsync(int id);
+
+        // Teacher self-service
+        Task<TeacherDetailsDto?> GetMyProfileAsync(int teacherId);
+        Task<bool> UpdateMyAddressAsync(int teacherId, AddressCreateDto model);
+        Task<IEnumerable<SubjectDto>> GetMySubjectsAsync(int teacherId);
+        Task<IEnumerable<StudentDetailsDto>> GetStudentsInMySubjectsAsync(int teacherId);
     }
 
     public interface ICourseService

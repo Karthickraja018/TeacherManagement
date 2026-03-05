@@ -1,44 +1,313 @@
 {
 	"info": {
 		"name": "TeacherManagement API",
-		"description": "Complete API collection for Teacher Management System",
+		"description": "Complete API collection for Teacher Management System with Role-Based Authorization (Admin / Teacher / Student).\n\n**Quick Start:**\n1. Run *Login as Admin*, *Login as Teacher*, or *Login as Student* — tokens are saved automatically to environment variables.\n2. Every protected request uses `{{token}}` (the last login). Role-specific folders carry the matching token variable.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "Students",
+			"name": "Auth",
+			"description": "Authentication endpoints — Register, Login, Refresh and Revoke tokens.\nLogin responses auto-save the JWT and refresh token to environment variables.",
+			"item": [
+				{
+					"name": "Register as Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const body = pm.response.json();",
+									"    pm.environment.set('adminToken', body.token);",
+									"    pm.environment.set('adminRefreshToken', body.refreshToken);",
+									"    pm.environment.set('token', body.token);",
+									"    pm.environment.set('refreshToken', body.refreshToken);",
+									"    console.log('Admin registered. Token saved.');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"admin_user\",\n  \"email\": \"admin@example.com\",\n  \"password\": \"Admin@123\",\n  \"role\": \"Admin\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/Auth/Register",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Auth", "Register"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register as Teacher",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const body = pm.response.json();",
+									"    pm.environment.set('teacherToken', body.token);",
+									"    pm.environment.set('teacherRefreshToken', body.refreshToken);",
+									"    pm.environment.set('token', body.token);",
+									"    pm.environment.set('refreshToken', body.refreshToken);",
+									"    console.log('Teacher registered. LinkedEntityId:', body.linkedEntityId);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"teacher_jane\",\n  \"email\": \"jane@example.com\",\n  \"password\": \"Teacher@123\",\n  \"role\": \"Teacher\",\n  \"linkedEntityId\": 1\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/Auth/Register",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Auth", "Register"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register as Student",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const body = pm.response.json();",
+									"    pm.environment.set('studentToken', body.token);",
+									"    pm.environment.set('studentRefreshToken', body.refreshToken);",
+									"    pm.environment.set('token', body.token);",
+									"    pm.environment.set('refreshToken', body.refreshToken);",
+									"    console.log('Student registered. LinkedEntityId:', body.linkedEntityId);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"student_john\",\n  \"email\": \"john@example.com\",\n  \"password\": \"Student@123\",\n  \"role\": \"Student\",\n  \"linkedEntityId\": 1\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/Auth/Register",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Auth", "Register"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login as Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const body = pm.response.json();",
+									"    pm.environment.set('adminToken', body.token);",
+									"    pm.environment.set('adminRefreshToken', body.refreshToken);",
+									"    pm.environment.set('token', body.token);",
+									"    pm.environment.set('refreshToken', body.refreshToken);",
+									"    console.log('Logged in as Admin. Token saved.');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"Admin@123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/Auth/Login",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Auth", "Login"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login as Teacher",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const body = pm.response.json();",
+									"    pm.environment.set('teacherToken', body.token);",
+									"    pm.environment.set('teacherRefreshToken', body.refreshToken);",
+									"    pm.environment.set('token', body.token);",
+									"    pm.environment.set('refreshToken', body.refreshToken);",
+									"    console.log('Logged in as Teacher. Token saved.');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"jane@example.com\",\n  \"password\": \"Teacher@123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/Auth/Login",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Auth", "Login"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login as Student",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const body = pm.response.json();",
+									"    pm.environment.set('studentToken', body.token);",
+									"    pm.environment.set('studentRefreshToken', body.refreshToken);",
+									"    pm.environment.set('token', body.token);",
+									"    pm.environment.set('refreshToken', body.refreshToken);",
+									"    console.log('Logged in as Student. Token saved.');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"Student@123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/Auth/Login",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Auth", "Login"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const body = pm.response.json();",
+									"    pm.environment.set('token', body.token);",
+									"    pm.environment.set('refreshToken', body.refreshToken);",
+									"    console.log('Token refreshed and saved.');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/Auth/RefreshToken",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Auth", "RefreshToken"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Revoke Token",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/Auth/RevokeToken",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Auth", "RevokeToken"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Students [Admin + Teacher]",
+			"description": "Admin and Teacher access. Admin has full CRUD; Teacher can read only.\nUse {{adminToken}} for write operations.",
 			"item": [
 				{
 					"name": "Get All Students",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{adminToken}}" }
+						],
 						"url": {
 							"raw": "{{baseUrl}}/api/Students/GetAll?PageNumber=1&PageSize=10&SearchTerm=&SortBy=name&SortDescending=false",
 							"host": ["{{baseUrl}}"],
 							"path": ["api", "Students", "GetAll"],
 							"query": [
-								{
-									"key": "PageNumber",
-									"value": "1"
-								},
-								{
-									"key": "PageSize",
-									"value": "10"
-								},
-								{
-									"key": "SearchTerm",
-									"value": ""
-								},
-								{
-									"key": "SortBy",
-									"value": "name",
-									"description": "Options: name, branch, studentid"
-								},
-								{
-									"key": "SortDescending",
-									"value": "false"
-								}
+								{ "key": "PageNumber", "value": "1" },
+								{ "key": "PageSize", "value": "10" },
+								{ "key": "SearchTerm", "value": "" },
+								{ "key": "SortBy", "value": "name", "description": "Options: name, branch, studentid" },
+								{ "key": "SortDescending", "value": "false" }
 							]
 						}
 					},
@@ -48,7 +317,9 @@
 					"name": "Get Student By Id",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{adminToken}}" }
+						],
 						"url": {
 							"raw": "{{baseUrl}}/api/Students/Get/1",
 							"host": ["{{baseUrl}}"],
@@ -62,10 +333,8 @@
 					"request": {
 						"method": "POST",
 						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{adminToken}}" }
 						],
 						"body": {
 							"mode": "raw",
@@ -84,10 +353,8 @@
 					"request": {
 						"method": "PUT",
 						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{adminToken}}" }
 						],
 						"body": {
 							"mode": "raw",
@@ -105,7 +372,9 @@
 					"name": "Delete Student",
 					"request": {
 						"method": "DELETE",
-						"header": [],
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{adminToken}}" }
+						],
 						"url": {
 							"raw": "{{baseUrl}}/api/Students/Delete/1",
 							"host": ["{{baseUrl}}"],
@@ -117,39 +386,128 @@
 			]
 		},
 		{
-			"name": "Teachers",
+			"name": "Student Self-Service [Student]",
+			"description": "Endpoints accessible only by authenticated users with the Student role.\nAll requests use {{studentToken}}.",
+			"item": [
+				{
+					"name": "My Profile",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{studentToken}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Students/MyProfile",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Students", "MyProfile"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update My Address",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{studentToken}}" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"line1\": \"55 Student Lane\",\n  \"line2\": \"Dorm Block C\",\n  \"city\": \"Austin\",\n  \"state\": \"TX\",\n  \"zip\": \"73301\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/Students/UpdateMyAddress",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Students", "UpdateMyAddress"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "My Courses",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{studentToken}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Students/MyCourses",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Students", "MyCourses"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "My Subjects",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{studentToken}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Students/MySubjects",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Students", "MySubjects"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "My Teachers",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{studentToken}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Students/MyTeachers",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Students", "MyTeachers"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Enroll In Course",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{studentToken}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Students/Enroll/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Students", "Enroll", "1"],
+							"description": "Replace the last path segment with the target CourseId."
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Teachers [Admin]",
+			"description": "Full CRUD on teacher records — Admin only.\nUse {{adminToken}}.",
 			"item": [
 				{
 					"name": "Get All Teachers",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{adminToken}}" }
+						],
 						"url": {
 							"raw": "{{baseUrl}}/api/Teachers/GetAllTeachers?PageNumber=1&PageSize=10&SearchTerm=&SortBy=name&SortDescending=false",
 							"host": ["{{baseUrl}}"],
 							"path": ["api", "Teachers", "GetAllTeachers"],
 							"query": [
-								{
-									"key": "PageNumber",
-									"value": "1"
-								},
-								{
-									"key": "PageSize",
-									"value": "10"
-								},
-								{
-									"key": "SearchTerm",
-									"value": ""
-								},
-								{
-									"key": "SortBy",
-									"value": "name",
-									"description": "Options: name, branch, teacherid"
-								},
-								{
-									"key": "SortDescending",
-									"value": "false"
-								}
+								{ "key": "PageNumber", "value": "1" },
+								{ "key": "PageSize", "value": "10" },
+								{ "key": "SearchTerm", "value": "" },
+								{ "key": "SortBy", "value": "name", "description": "Options: name, branch, teacherid" },
+								{ "key": "SortDescending", "value": "false" }
 							]
 						}
 					},
@@ -159,7 +517,9 @@
 					"name": "Get Teacher By Id",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{adminToken}}" }
+						],
 						"url": {
 							"raw": "{{baseUrl}}/api/Teachers/GetTeacherById/1",
 							"host": ["{{baseUrl}}"],
@@ -173,10 +533,8 @@
 					"request": {
 						"method": "POST",
 						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{adminToken}}" }
 						],
 						"body": {
 							"mode": "raw",
@@ -195,10 +553,8 @@
 					"request": {
 						"method": "PUT",
 						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{adminToken}}" }
 						],
 						"body": {
 							"mode": "raw",
@@ -216,7 +572,9 @@
 					"name": "Delete Teacher",
 					"request": {
 						"method": "DELETE",
-						"header": [],
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{adminToken}}" }
+						],
 						"url": {
 							"raw": "{{baseUrl}}/api/Teachers/DeleteTeacher/1",
 							"host": ["{{baseUrl}}"],
@@ -228,13 +586,87 @@
 			]
 		},
 		{
-			"name": "Courses",
+			"name": "Teacher Self-Service [Teacher]",
+			"description": "Endpoints accessible only by authenticated users with the Teacher role.\nAll requests use {{teacherToken}}.",
+			"item": [
+				{
+					"name": "My Profile",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{teacherToken}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Teachers/MyProfile",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Teachers", "MyProfile"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update My Address",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{teacherToken}}" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"line1\": \"42 Faculty Road\",\n  \"line2\": \"Block A\",\n  \"city\": \"Boston\",\n  \"state\": \"MA\",\n  \"zip\": \"02115\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/Teachers/UpdateMyAddress",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Teachers", "UpdateMyAddress"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "My Subjects",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{teacherToken}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Teachers/MySubjects",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Teachers", "MySubjects"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "My Students",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{teacherToken}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Teachers/MyStudents",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Teachers", "MyStudents"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Courses [All Roles]",
+			"description": "Read — Admin, Teacher, Student. Write/Delete — Admin only.",
 			"item": [
 				{
 					"name": "Get All Courses",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
 						"url": {
 							"raw": "{{baseUrl}}/api/Courses/GetAll",
 							"host": ["{{baseUrl}}"],
@@ -247,7 +679,9 @@
 					"name": "Get Course By Id",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
 						"url": {
 							"raw": "{{baseUrl}}/api/Courses/Get/1",
 							"host": ["{{baseUrl}}"],
@@ -261,10 +695,8 @@
 					"request": {
 						"method": "POST",
 						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{adminToken}}" }
 						],
 						"body": {
 							"mode": "raw",
@@ -283,10 +715,8 @@
 					"request": {
 						"method": "PUT",
 						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{adminToken}}" }
 						],
 						"body": {
 							"mode": "raw",
@@ -304,7 +734,9 @@
 					"name": "Delete Course",
 					"request": {
 						"method": "DELETE",
-						"header": [],
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{adminToken}}" }
+						],
 						"url": {
 							"raw": "{{baseUrl}}/api/Courses/Delete/1",
 							"host": ["{{baseUrl}}"],
@@ -316,13 +748,16 @@
 			]
 		},
 		{
-			"name": "Subjects",
+			"name": "Subjects [All Roles]",
+			"description": "Read — Admin, Teacher, Student. Write/Delete — Admin only.",
 			"item": [
 				{
 					"name": "Get All Subjects",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
 						"url": {
 							"raw": "{{baseUrl}}/api/Subjects/GetAll",
 							"host": ["{{baseUrl}}"],
@@ -335,7 +770,9 @@
 					"name": "Get Subject By Id",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
 						"url": {
 							"raw": "{{baseUrl}}/api/Subjects/Get/1",
 							"host": ["{{baseUrl}}"],
@@ -349,10 +786,8 @@
 					"request": {
 						"method": "POST",
 						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{adminToken}}" }
 						],
 						"body": {
 							"mode": "raw",
@@ -371,10 +806,8 @@
 					"request": {
 						"method": "PUT",
 						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{adminToken}}" }
 						],
 						"body": {
 							"mode": "raw",
@@ -392,7 +825,9 @@
 					"name": "Delete Subject",
 					"request": {
 						"method": "DELETE",
-						"header": [],
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{adminToken}}" }
+						],
 						"url": {
 							"raw": "{{baseUrl}}/api/Subjects/Delete/1",
 							"host": ["{{baseUrl}}"],
@@ -404,101 +839,16 @@
 			]
 		},
 		{
-			"name": "Addresses",
-			"item": [
-				{
-					"name": "Get All Addresses",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/api/Addresses/GetAll",
-							"host": ["{{baseUrl}}"],
-							"path": ["api", "Addresses", "GetAll"]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Address By Id",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/api/Addresses/Get/1",
-							"host": ["{{baseUrl}}"],
-							"path": ["api", "Addresses", "Get", "1"]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create Address",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"line1\": \"100 New Street\",\n  \"line2\": \"Floor 5\",\n  \"city\": \"Los Angeles\",\n  \"state\": \"CA\",\n  \"zip\": \"90001\"\n}"
-						},
-						"url": {
-							"raw": "{{baseUrl}}/api/Addresses/Create",
-							"host": ["{{baseUrl}}"],
-							"path": ["api", "Addresses", "Create"]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Address",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"line1\": \"200 Updated Street\",\n  \"line2\": \"\",\n  \"city\": \"San Francisco\",\n  \"state\": \"CA\",\n  \"zip\": \"94102\"\n}"
-						},
-						"url": {
-							"raw": "{{baseUrl}}/api/Addresses/Update/1",
-							"host": ["{{baseUrl}}"],
-							"path": ["api", "Addresses", "Update", "1"]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Address",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/api/Addresses/Delete/1",
-							"host": ["{{baseUrl}}"],
-							"path": ["api", "Addresses", "Delete", "1"]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Branches",
+			"name": "Branches [All Roles]",
+			"description": "Read — Admin, Teacher, Student. Write/Delete — Admin only.",
 			"item": [
 				{
 					"name": "Get All Branches",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
 						"url": {
 							"raw": "{{baseUrl}}/api/Branches/GetAll",
 							"host": ["{{baseUrl}}"],
@@ -511,7 +861,9 @@
 					"name": "Get Branch By Id",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
 						"url": {
 							"raw": "{{baseUrl}}/api/Branches/Get/1",
 							"host": ["{{baseUrl}}"],
@@ -525,10 +877,8 @@
 					"request": {
 						"method": "POST",
 						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{adminToken}}" }
 						],
 						"body": {
 							"mode": "raw",
@@ -547,10 +897,8 @@
 					"request": {
 						"method": "PUT",
 						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{adminToken}}" }
 						],
 						"body": {
 							"mode": "raw",
@@ -568,11 +916,104 @@
 					"name": "Delete Branch",
 					"request": {
 						"method": "DELETE",
-						"header": [],
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{adminToken}}" }
+						],
 						"url": {
 							"raw": "{{baseUrl}}/api/Branches/Delete/1",
 							"host": ["{{baseUrl}}"],
 							"path": ["api", "Branches", "Delete", "1"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Addresses [Admin]",
+			"description": "All direct address CRUD is Admin only.\nTeachers and Students update their own address via the self-service endpoints in Teachers and Students folders.",
+			"item": [
+				{
+					"name": "Get All Addresses",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{adminToken}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Addresses/GetAll",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Addresses", "GetAll"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Address By Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{adminToken}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Addresses/Get/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Addresses", "Get", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Address",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{adminToken}}" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"line1\": \"100 New Street\",\n  \"line2\": \"Floor 5\",\n  \"city\": \"Los Angeles\",\n  \"state\": \"CA\",\n  \"zip\": \"90001\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/Addresses/Create",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Addresses", "Create"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Address",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{adminToken}}" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"line1\": \"200 Updated Street\",\n  \"line2\": \"\",\n  \"city\": \"San Francisco\",\n  \"state\": \"CA\",\n  \"zip\": \"94102\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/Addresses/Update/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Addresses", "Update", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Address",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{adminToken}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Addresses/Delete/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Addresses", "Delete", "1"]
 						}
 					},
 					"response": []

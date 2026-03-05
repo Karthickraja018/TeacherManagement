@@ -7,8 +7,6 @@ using TeacherManagement.Services.Interfaces;
 
 namespace TeacherManagement.Services
 {
-    
-
     public class StudentService : IStudentService
     {
         private readonly TeacherContext _db;
@@ -178,6 +176,87 @@ namespace TeacherManagement.Services
             var existing = await _db.Students.FindAsync(id);
             if (existing == null) return false;
             _db.Students.Remove(existing);
+            await _db.SaveChangesAsync();
+            return true;
+        }
+
+        // ?? Student self-service ??????????????????????????????????????????????
+
+        public async Task<StudentDetailsDto?> GetMyProfileAsync(int studentId)
+            => await GetByIdAsync(studentId);
+
+        public async Task<bool> UpdateMyAddressAsync(int studentId, AddressCreateDto model)
+        {
+            var student = await _db.Students.Include(s => s.Address).FirstOrDefaultAsync(s => s.StudentId == studentId);
+            if (student == null) return false;
+
+            if (student.Address == null)
+            {
+                var address = _mapper.Map<Address>(model);
+                _db.Addresses.Add(address);
+                await _db.SaveChangesAsync();
+                student.Address = address;
+                student.AddressId = address.AddressId;
+            }
+            else
+            {
+                _mapper.Map(model, student.Address);
+            }
+
+            await _db.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<IEnumerable<CourseDto>> GetMyCoursesAsync(int studentId)
+        {
+            var student = await _db.Students
+                .Include(s => s.Courses).ThenInclude(c => c.Subjects)
+                .FirstOrDefaultAsync(s => s.StudentId == studentId);
+
+            if (student == null) return Enumerable.Empty<CourseDto>();
+            return _mapper.Map<IEnumerable<CourseDto>>(student.Courses);
+        }
+
+        public async Task<IEnumerable<SubjectDto>> GetMySubjectsAsync(int studentId)
+        {
+            var student = await _db.Students
+                .Include(s => s.Courses).ThenInclude(c => c.Subjects).ThenInclude(sub => sub.Courses)
+                .FirstOrDefaultAsync(s => s.StudentId == studentId);
+
+            if (student == null) return Enumerable.Empty<SubjectDto>();
+
+            var subjects = student.Courses.SelectMany(c => c.Subjects).DistinctBy(s => s.SubjectId).ToList();
+            return _mapper.Map<IEnumerable<SubjectDto>>(subjects);
+        }
+
+        public async Task<IEnumerable<TeacherDto>> GetMyTeachersAsync(int studentId)
+        {
+            var student = await _db.Students
+                .Include(s => s.Courses).ThenInclude(c => c.Subjects).ThenInclude(sub => sub.Teachers).ThenInclude(t => t.Branch)
+                .FirstOrDefaultAsync(s => s.StudentId == studentId);
+
+            if (student == null) return Enumerable.Empty<TeacherDto>();
+
+            var teachers = student.Courses
+                .SelectMany(c => c.Subjects)
+                .SelectMany(s => s.Teachers)
+                .DistinctBy(t => t.TeacherId)
+                .ToList();
+
+            return _mapper.Map<IEnumerable<TeacherDto>>(teachers);
+        }
+
+        public async Task<bool> EnrollInCourseAsync(int studentId, int courseId)
+        {
+            var student = await _db.Students.Include(s => s.Courses).FirstOrDefaultAsync(s => s.StudentId == studentId);
+            if (student == null) return false;
+
+            var course = await _db.Courses.FindAsync(courseId);
+            if (course == null) return false;
+
+            if (student.Courses.Any(c => c.CourseId == courseId)) return true;
+
+            student.Courses.Add(course);
             await _db.SaveChangesAsync();
             return true;
         }

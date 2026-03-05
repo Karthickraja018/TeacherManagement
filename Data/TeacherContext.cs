@@ -17,6 +17,8 @@ namespace TeacherManagement.Data
         public DbSet<Course> Courses { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<AppUser> AppUsers { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
       
         public DbSet<StudentDetailsDto> StudentDetails { get; set; }
@@ -32,6 +34,8 @@ namespace TeacherManagement.Data
             ConfigureTeacher(modelBuilder);
             ConfigureCourse(modelBuilder);
             ConfigureSubject(modelBuilder);
+            ConfigureAppUser(modelBuilder);
+            ConfigureRefreshToken(modelBuilder);
 
             // Configure many-to-many join tables explicitly
             modelBuilder.Entity("StudentCourse", b =>
@@ -165,6 +169,37 @@ namespace TeacherManagement.Data
                 entity.ToTable("Subjects");
                 entity.HasKey(s => s.SubjectId);
                 entity.Property(s => s.Name).IsRequired().HasMaxLength(200);
+            });
+        }
+
+        private void ConfigureAppUser(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<AppUser>(entity =>
+            {
+                entity.ToTable("AppUsers");
+                entity.HasKey(u => u.Id);
+                entity.HasIndex(u => u.Email).IsUnique();
+                entity.HasIndex(u => u.Username).IsUnique();
+                entity.Property(u => u.Username).IsRequired().HasMaxLength(100);
+                entity.Property(u => u.Email).IsRequired().HasMaxLength(200);
+                entity.Property(u => u.PasswordHash).IsRequired();
+                entity.Property(u => u.Role).IsRequired().HasMaxLength(20);
+            });
+        }
+
+        private void ConfigureRefreshToken(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<RefreshToken>(entity =>
+            {
+                entity.ToTable("RefreshTokens");
+                entity.HasKey(r => r.Id);
+                entity.Property(r => r.Token).IsRequired();
+                entity.Property(r => r.Username).IsRequired().HasMaxLength(100);
+                entity.HasIndex(r => r.Token).IsUnique();
+                entity.HasOne(r => r.AppUser)
+                      .WithMany()
+                      .HasForeignKey(r => r.AppUserId)
+                      .OnDelete(DeleteBehavior.Cascade);
             });
         }
     }

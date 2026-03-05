@@ -6,7 +6,6 @@ using TeacherManagement.Models;
 
 namespace TeacherManagement.Services
 {
-    
     public class TeacherService : ITeacherService
     {
         private readonly TeacherContext _db;
@@ -22,15 +21,15 @@ namespace TeacherManagement.Services
         {
             var all = await _db.TeacherDetails.FromSqlRaw("EXEC sp_GetAllTeachers").AsNoTracking().ToListAsync();
             var q = all.AsQueryable();
-            
+
             if (!string.IsNullOrWhiteSpace(parameters.SearchTerm))
             {
                 var s = parameters.SearchTerm.ToLower();
-                q = q.Where(t => (t.TeacherName != null && t.TeacherName.ToLower().Contains(s)) || 
-                                 (t.BranchName != null && t.BranchName.ToLower().Contains(s)) || 
+                q = q.Where(t => (t.TeacherName != null && t.TeacherName.ToLower().Contains(s)) ||
+                                 (t.BranchName != null && t.BranchName.ToLower().Contains(s)) ||
                                  (t.SubjectNamesCsv != null && t.SubjectNamesCsv.ToLower().Contains(s)));
             }
-            
+
             if (!string.IsNullOrWhiteSpace(parameters.SortBy))
             {
                 q = parameters.SortBy.ToLower() switch
@@ -175,6 +174,68 @@ namespace TeacherManagement.Services
             _db.Teachers.Remove(existing);
             await _db.SaveChangesAsync();
             return true;
+        }
+
+        // ?? Teacher self-service ??????????????????????????????????????????????
+
+        public async Task<TeacherDetailsDto?> GetMyProfileAsync(int teacherId)
+            => await GetByIdAsync(teacherId);
+
+        public async Task<bool> UpdateMyAddressAsync(int teacherId, AddressCreateDto model)
+        {
+            var teacher = await _db.Teachers.Include(t => t.Address).FirstOrDefaultAsync(t => t.TeacherId == teacherId);
+            if (teacher == null) return false;
+
+            if (teacher.Address == null)
+            {
+                var address = _mapper.Map<Address>(model);
+                _db.Addresses.Add(address);
+                await _db.SaveChangesAsync();
+                teacher.Address = address;
+                teacher.AddressId = address.AddressId;
+            }
+            else
+            {
+                _mapper.Map(model, teacher.Address);
+            }
+
+            await _db.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<IEnumerable<SubjectDto>> GetMySubjectsAsync(int teacherId)
+        {
+            var teacher = await _db.Teachers
+                .Include(t => t.Subjects).ThenInclude(s => s.Courses)
+                .FirstOrDefaultAsync(t => t.TeacherId == teacherId);
+
+            if (teacher == null) return Enumerable.Empty<SubjectDto>();
+            return _mapper.Map<IEnumerable<SubjectDto>>(teacher.Subjects);
+        }
+
+        public async Task<IEnumerable<StudentDetailsDto>> GetStudentsInMySubjectsAsync(int teacherId)
+        {
+            var teacher = await _db.Teachers
+                .Include(t => t.Subjects).ThenInclude(s => s.Courses).ThenInclude(c => c.Students)
+                .FirstOrDefaultAsync(t => t.TeacherId == teacherId);
+
+            if (teacher == null) return Enumerable.Empty<StudentDetailsDto>();
+
+            var studentIds = teacher.Subjects
+                .SelectMany(s => s.Courses)
+                .SelectMany(c => c.Students)
+                .Select(s => s.StudentId)
+                .Distinct()
+                .ToList();
+
+            var result = new List<StudentDetailsDto>();
+            foreach (var sid in studentIds)
+            {
+                var list = await _db.StudentDetails.FromSqlInterpolated($"EXEC sp_GetStudentById {sid}").ToListAsync();
+                var dto = list.FirstOrDefault();
+                if (dto != null) result.Add(dto);
+            }
+            return result;
         }
     }
 }
