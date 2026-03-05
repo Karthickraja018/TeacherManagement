@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using TeacherManagement.Data;
 using TeacherManagement.DTOs;
 using TeacherManagement.Models;
+using TeacherManagement.Services.Interfaces;
 
 namespace TeacherManagement.Services
 {
@@ -55,6 +56,14 @@ namespace TeacherManagement.Services
 
         public async Task<TeacherDto> CreateAsync(TeacherCreateDto model)
         {
+            var emailExists = await _db.AppUsers.AnyAsync(u => u.Email.ToLower() == model.Email.ToLower());
+            if (emailExists)
+                throw new InvalidOperationException("A user with this email already exists.");
+
+            var usernameExists = await _db.AppUsers.AnyAsync(u => u.Username.ToLower() == model.Username.ToLower());
+            if (usernameExists)
+                throw new InvalidOperationException("A user with this username already exists.");
+
             var branchName = model.BranchName?.Trim();
             var branch = await _db.Branches.FirstOrDefaultAsync(b => b.Name.ToLower() == branchName.ToLower());
             if (branch == null)
@@ -93,6 +102,17 @@ namespace TeacherManagement.Services
             teacher.Subjects = subjects;
 
             _db.Teachers.Add(teacher);
+            await _db.SaveChangesAsync();
+
+            var appUser = new AppUser
+            {
+                Username = model.Username.Trim(),
+                Email = model.Email.Trim().ToLower(),
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.Password),
+                Role = "Teacher",
+                LinkedEntityId = teacher.TeacherId
+            };
+            _db.AppUsers.Add(appUser);
             await _db.SaveChangesAsync();
 
             var created = await _db.Teachers

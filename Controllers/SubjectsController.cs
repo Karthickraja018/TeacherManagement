@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TeacherManagement.DTOs;
 using TeacherManagement.Services;
+using TeacherManagement.Services.Interfaces;
 
 namespace TeacherManagement.Controllers
 {

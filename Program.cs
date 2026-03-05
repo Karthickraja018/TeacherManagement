@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using TeacherManagement.Data;
 using TeacherManagement.Middleware;
 using TeacherManagement.Services;
+using TeacherManagement.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 

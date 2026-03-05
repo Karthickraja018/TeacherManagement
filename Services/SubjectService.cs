@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using TeacherManagement.Data;
 using TeacherManagement.DTOs;
 using TeacherManagement.Models;
+using TeacherManagement.Services.Interfaces;
 
 namespace TeacherManagement.Services
 {

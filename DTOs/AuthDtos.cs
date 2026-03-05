@@ -21,10 +21,7 @@ namespace TeacherManagement.DTOs
         [RegularExpression("^(Admin|Teacher|Student)$", ErrorMessage = "Role must be Admin, Teacher or Student.")]
         public string Role { get; set; }
 
-        /// <summary>
-        /// Optional: the TeacherId or StudentId this account belongs to.
-        /// Required when Role is Teacher or Student.
-        /// </summary>
+    
         public int? LinkedEntityId { get; set; }
     }
 

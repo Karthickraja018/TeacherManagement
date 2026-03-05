@@ -31,6 +31,19 @@ namespace TeacherManagement.DTOs
         public AddressCreateDto? Address { get; set; }
 
         public List<string> SubjectNames { get; set; } = new List<string>();
+
+        [Required]
+        [MaxLength(100)]
+        public string Username { get; set; }
+
+        [Required]
+        [EmailAddress]
+        [MaxLength(200)]
+        public string Email { get; set; }
+
+        [Required]
+        [MinLength(6)]
+        public string Password { get; set; }
     }
 
     public class TeacherUpdateDto

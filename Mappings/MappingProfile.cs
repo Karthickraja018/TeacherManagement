@@ -8,7 +8,7 @@ namespace TeacherManagement.Mappings
     {
         public MappingProfile()
         {
-            // Student mappings
+            
             CreateMap<Student, StudentDto>()
                 .ForMember(dest => dest.CourseIds, opt => opt.MapFrom(src => src.Courses.Select(c => c.CourseId).ToList()));
             
