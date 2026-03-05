@@ -1,0 +1,590 @@
+{
+	"info": {
+		"name": "TeacherManagement API",
+		"description": "Complete API collection for Teacher Management System",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Students",
+			"item": [
+				{
+					"name": "Get All Students",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/Students/GetAll?PageNumber=1&PageSize=10&SearchTerm=&SortBy=name&SortDescending=false",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Students", "GetAll"],
+							"query": [
+								{
+									"key": "PageNumber",
+									"value": "1"
+								},
+								{
+									"key": "PageSize",
+									"value": "10"
+								},
+								{
+									"key": "SearchTerm",
+									"value": ""
+								},
+								{
+									"key": "SortBy",
+									"value": "name",
+									"description": "Options: name, branch, studentid"
+								},
+								{
+									"key": "SortDescending",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Student By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/Students/Get/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Students", "Get", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Student",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"John Doe\",\n  \"branchName\": \"Main Campus\",\n  \"address\": {\n    \"line1\": \"123 Main Street\",\n    \"line2\": \"Apt 4B\",\n    \"city\": \"New York\",\n    \"state\": \"NY\",\n    \"zip\": \"10001\"\n  },\n  \"courseNames\": [\n    \"BSc Computer Science\",\n    \"BA Economics\"\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/Students/Create",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Students", "Create"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Student",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"John Doe Updated\",\n  \"branchName\": \"City Center\",\n  \"address\": {\n    \"line1\": \"456 Updated Street\",\n    \"line2\": \"\",\n    \"city\": \"Boston\",\n    \"state\": \"MA\",\n    \"zip\": \"02101\"\n  },\n  \"courseNames\": [\n    \"BSc Computer Science\"\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/Students/Update/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Students", "Update", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Student",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/Students/Delete/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Students", "Delete", "1"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Teachers",
+			"item": [
+				{
+					"name": "Get All Teachers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/Teachers/GetAllTeachers?PageNumber=1&PageSize=10&SearchTerm=&SortBy=name&SortDescending=false",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Teachers", "GetAllTeachers"],
+							"query": [
+								{
+									"key": "PageNumber",
+									"value": "1"
+								},
+								{
+									"key": "PageSize",
+									"value": "10"
+								},
+								{
+									"key": "SearchTerm",
+									"value": ""
+								},
+								{
+									"key": "SortBy",
+									"value": "name",
+									"description": "Options: name, branch, teacherid"
+								},
+								{
+									"key": "SortDescending",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Teacher By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/Teachers/GetTeacherById/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Teachers", "GetTeacherById", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Teacher",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"teacherName\": \"Dr. Jane Smith\",\n  \"branchName\": \"Main Campus\",\n  \"address\": {\n    \"line1\": \"789 Faculty Lane\",\n    \"line2\": \"\",\n    \"city\": \"Chicago\",\n    \"state\": \"IL\",\n    \"zip\": \"60601\"\n  },\n  \"subjectNames\": [\n    \"Mathematics\",\n    \"Physics\"\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/Teachers/PostTeacher",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Teachers", "PostTeacher"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Teacher",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"teacherName\": \"Dr. Jane Smith Updated\",\n  \"branchName\": \"West Campus\",\n  \"address\": {\n    \"line1\": \"999 Updated Avenue\",\n    \"line2\": \"Suite 200\",\n    \"city\": \"Seattle\",\n    \"state\": \"WA\",\n    \"zip\": \"98101\"\n  },\n  \"subjectNames\": [\n    \"Mathematics\",\n    \"Computer Science\"\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/Teachers/UpdateTeacher/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Teachers", "UpdateTeacher", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Teacher",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/Teachers/DeleteTeacher/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Teachers", "DeleteTeacher", "1"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Courses",
+			"item": [
+				{
+					"name": "Get All Courses",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/Courses/GetAll",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Courses", "GetAll"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Course By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/Courses/Get/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Courses", "Get", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Course",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"courseName\": \"BSc Data Science\",\n  \"subjectNames\": [\n    \"Mathematics\",\n    \"Computer Science\",\n    \"Economics\"\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/Courses/Create",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Courses", "Create"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Course",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"courseName\": \"BSc Data Science Updated\",\n  \"subjectNames\": [\n    \"Mathematics\",\n    \"Physics\"\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/Courses/Update/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Courses", "Update", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Course",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/Courses/Delete/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Courses", "Delete", "1"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Subjects",
+			"item": [
+				{
+					"name": "Get All Subjects",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/Subjects/GetAll",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Subjects", "GetAll"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Subject By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/Subjects/Get/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Subjects", "Get", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Subject",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Artificial Intelligence\",\n  \"courseNames\": [\n    \"BSc Computer Science\",\n    \"BSc Data Science\"\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/Subjects/Create",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Subjects", "Create"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Subject",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Machine Learning\",\n  \"courseNames\": [\n    \"BSc Computer Science\"\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/Subjects/Update/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Subjects", "Update", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Subject",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/Subjects/Delete/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Subjects", "Delete", "1"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Addresses",
+			"item": [
+				{
+					"name": "Get All Addresses",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/Addresses/GetAll",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Addresses", "GetAll"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Address By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/Addresses/Get/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Addresses", "Get", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Address",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"line1\": \"100 New Street\",\n  \"line2\": \"Floor 5\",\n  \"city\": \"Los Angeles\",\n  \"state\": \"CA\",\n  \"zip\": \"90001\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/Addresses/Create",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Addresses", "Create"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Address",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"line1\": \"200 Updated Street\",\n  \"line2\": \"\",\n  \"city\": \"San Francisco\",\n  \"state\": \"CA\",\n  \"zip\": \"94102\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/Addresses/Update/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Addresses", "Update", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Address",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/Addresses/Delete/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Addresses", "Delete", "1"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Branches",
+			"item": [
+				{
+					"name": "Get All Branches",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/Branches/GetAll",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Branches", "GetAll"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Branch By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/Branches/Get/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Branches", "Get", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Branch",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"branchId\": 0,\n  \"name\": \"North Campus\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/Branches/Create",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Branches", "Create"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Branch",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"branchId\": 1,\n  \"name\": \"South Campus\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/Branches/Update/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Branches", "Update", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Branch",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/Branches/Delete/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Branches", "Delete", "1"]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://localhost:7220",
+			"type": "string"
+		}
+	]
+}

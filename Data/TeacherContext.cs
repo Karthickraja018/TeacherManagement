@@ -18,9 +18,9 @@ namespace TeacherManagement.Data
         public DbSet<Student> Students { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
 
-        // Keyless DTO mapping for stored proc
+      
         public DbSet<StudentDetailsDto> StudentDetails { get; set; }
-        public DbSet<TeacherDetailsDto> TeacherDetails { get; set; } // <-- Added TeacherDetailsDto DbSet
+        public DbSet<TeacherDetailsDto> TeacherDetails { get; set; } 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
